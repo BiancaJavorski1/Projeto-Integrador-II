@@ -1,0 +1,32 @@
+-- Criação do Banco de Dados e Tabelas para o EduSinal+
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    tipo_usuario TEXT CHECK(tipo_usuario IN ('ALUNO', 'PROFESSOR')) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS glossario_libras (
+    id_termo INTEGER PRIMARY KEY AUTOINCREMENT,
+    termo_tecnico TEXT NOT NULL,
+    descricao TEXT NOT NULL,
+    instrucao_libras TEXT NOT NULL,
+    categoria TEXT CHECK(categoria IN ('HARDWARE', 'MATEMATICA', 'POO')) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS progresso_aluno (
+    id_progresso INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario INTEGER,
+    id_termo INTEGER,
+    pontuacao INTEGER DEFAULT 0,
+    data_conclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_termo) REFERENCES glossario_libras(id_termo)
+);
+
+-- Inserção de dados iniciais de exemplo
+INSERT OR IGNORE INTO glossario_libras (id_termo, termo_tecnico, descricao, instrucao_libras, categoria) VALUES 
+(1, 'CPU (Unidade Central de Processamento)', 'Cérebro do computador responsável por executar instruções.', '[Sinal em LIBRAS: Mover a mão em formato de garra sobre a testa simulando raciocínio/processador]', 'HARDWARE'),
+(2, 'Conversão Binária', 'Processo de representar números usando apenas os dígitos 0 e 1.', '[Sinal em LIBRAS: Alternar indicador apontado para cima (1) e punho fechado (0)]', 'MATEMATICA'),
+(3, 'Encapsulamento', 'Princípio de POO que protege o estado interno de um objeto.', '[Sinal em LIBRAS: Cruzar os braços na frente do peito protegendo um objeto imaginário]', 'POO');
